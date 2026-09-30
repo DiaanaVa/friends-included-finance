@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+coverage/
+.vercel/
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+service-account*.json
+npm-debug.log*
+pnpm-debug.log*
+*.tsbuildinfo
+.DS_Store
+work/
+outputs/
