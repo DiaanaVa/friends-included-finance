@@ -11,7 +11,7 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 - [x] Initial migration applied to the live Supabase project and verified
 - [x] Row Level Security enabled on all four application tables with no public policies
 - [x] Shared commission calculation with assignment rounding rule
-- [~] Dependencies installed; TypeScript and ESLint pass; automated tests and final build worker are blocked by this sandbox's `spawn EPERM` restriction
+- [~] Dependencies installed; TypeScript and ESLint pass; automated tests and the final local build worker are blocked by this sandbox's `spawn EPERM` restriction; Vercel production build succeeds
 
 ## Access and permissions
 
@@ -72,7 +72,7 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 - [x] Required denied actions covered at processing layer (execution blocked locally by sandbox `spawn EPERM`; TypeScript verifies test sources)
 - [ ] Interrupted Sheets update test completed
 - [ ] Failed Telegram delivery test completed
-- [ ] GitHub repository accessible to instructor
-- [ ] Vercel deployment accessible to instructor
+- [x] GitHub repository is publicly accessible
+- [x] Vercel production deployment is publicly accessible and live-tested
 - [ ] Page includes student name, links, and brief instructions
 - [ ] One Vercel URL submitted in the student's course-spreadsheet row

@@ -3,6 +3,7 @@ import { approveSale, TransactionError } from "@/lib/domain/transactions";
 import { firstValidationError, saleApprovalSchema } from "@/lib/domain/validation";
 import { currentDemoRole } from "@/lib/server/demo-session";
 import { createTransactionRepository } from "@/lib/server/transaction-repository";
+import { deliverDecisionNotification, syncTransaction } from "@/lib/server/integrations";
 
 export async function POST(request: Request, { params }: { params: Promise<{ reference: string }> }) {
   const role = await currentDemoRole();
@@ -11,7 +12,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ ref
   if (!parsed.success) return NextResponse.json({ error: firstValidationError(parsed.error) }, { status: 400 });
   try {
     const { reference } = await params;
-    return NextResponse.json(await approveSale(createTransactionRepository(), role, reference, { richard: parsed.data.richardPct, anastasia: parsed.data.anastasiaPct, jean_claude: parsed.data.jeanClaudePct }));
+    const result=await approveSale(createTransactionRepository(), role, reference, { richard: parsed.data.richardPct, anastasia: parsed.data.anastasiaPct, jean_claude: parsed.data.jeanClaudePct });
+    if(!result.alreadyProcessed){ await syncTransaction("SALE",reference); await deliverDecisionNotification("SALE",reference); }
+    return NextResponse.json(result);
   } catch (error) {
     if (error instanceof TransactionError) return NextResponse.json({ error: error.message }, { status: error.code === "FORBIDDEN" ? 403 : 500 });
     return NextResponse.json({ error: "Unexpected server error." }, { status: 500 });

@@ -3,6 +3,7 @@ import { TransactionError, submitExpense } from "@/lib/domain/transactions";
 import { expenseSubmissionSchema, firstValidationError } from "@/lib/domain/validation";
 import { currentDemoRole } from "@/lib/server/demo-session";
 import { createTransactionRepository } from "@/lib/server/transaction-repository";
+import { syncTransaction } from "@/lib/server/integrations";
 
 export async function POST(request: Request) {
   const role = await currentDemoRole();
@@ -10,7 +11,8 @@ export async function POST(request: Request) {
   const parsed = expenseSubmissionSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: firstValidationError(parsed.error) }, { status: 400 });
   try {
-    return NextResponse.json(await submitExpense(createTransactionRepository(), role, parsed.data), { status: 201 });
+    const result=await submitExpense(createTransactionRepository(), role, parsed.data); await syncTransaction("EXPENSE",result.reference);
+    return NextResponse.json(result, { status: 201 });
   } catch (error) {
     if (error instanceof TransactionError) {
       return NextResponse.json({ error: error.message }, { status: error.code === "FORBIDDEN" ? 403 : error.code === "DUPLICATE" ? 409 : 500 });

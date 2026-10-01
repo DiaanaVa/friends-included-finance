@@ -19,6 +19,9 @@ export interface TransactionRepository {
   allocatePendingExpense(reference: string, approverId: string, allocation: ExpenseAllocation): Promise<"UPDATED" | "ALREADY_PROCESSED" | "NOT_FOUND">;
 }
 
+export type SubmissionContext = { channel: "WEB" | "TELEGRAM"; telegramChatId?: number };
+const webContext: SubmissionContext = { channel: "WEB" };
+
 async function requireManager(repo: TransactionRepository, actorCode: string) {
   const actor = await repo.findEmployee(actorCode);
   if (!actor || actor.role !== "manager") throw new TransactionError("FORBIDDEN", "Only Svetlana can make manager decisions.");
@@ -42,7 +45,7 @@ export async function allocateExpense(repo: TransactionRepository, actorCode: st
   return { reference, status: "ALLOCATED" as const, alreadyProcessed: outcome === "ALREADY_PROCESSED" };
 }
 
-export async function submitSale(repo: TransactionRepository, actorCode: string, input: SaleSubmission) {
+export async function submitSale(repo: TransactionRepository, actorCode: string, input: SaleSubmission, context: SubmissionContext = webContext) {
   const actor = await repo.findEmployee(actorCode);
   if (!actor || actor.role !== "salesperson") {
     throw new TransactionError("FORBIDDEN", "Only a salesperson can submit a sale.");
@@ -50,9 +53,9 @@ export async function submitSale(repo: TransactionRepository, actorCode: string,
 
   await repo.insertSale({
     reference: input.reference,
-    submission_channel: "WEB",
+    submission_channel: context.channel,
     submitting_employee_id: actor.id,
-    original_telegram_chat_id: null,
+    original_telegram_chat_id: context.telegramChatId ?? null,
     customer: input.customer,
     project: input.project,
     description: input.description,
@@ -65,7 +68,7 @@ export async function submitSale(repo: TransactionRepository, actorCode: string,
   return { reference: input.reference, status: "PENDING_APPROVAL" as const };
 }
 
-export async function submitExpense(repo: TransactionRepository, actorCode: string, input: ExpenseSubmission) {
+export async function submitExpense(repo: TransactionRepository, actorCode: string, input: ExpenseSubmission, context: SubmissionContext = webContext) {
   const actor = await repo.findEmployee(actorCode);
   if (!actor || actor.role !== "expense_reporter") {
     throw new TransactionError("FORBIDDEN", "Only Kevin can submit an expense.");
@@ -74,9 +77,9 @@ export async function submitExpense(repo: TransactionRepository, actorCode: stri
   const overhead = input.proposedAllocation === "OVERHEAD";
   await repo.insertExpense({
     reference: input.reference,
-    submission_channel: "WEB",
+    submission_channel: context.channel,
     submitting_employee_id: actor.id,
-    original_telegram_chat_id: null,
+    original_telegram_chat_id: context.telegramChatId ?? null,
     description: input.description,
     category: input.category,
     amount_cents: input.amount,
