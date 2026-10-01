@@ -14,10 +14,10 @@ export function createTransactionRepository(): TransactionRepository {
   const db = createSupabaseAdmin();
   return {
     async findEmployee(code) {
-      const { data, error } = await db.from("employees").select("id,code,display_name,role").eq("code", code).maybeSingle();
+      const { data, error } = await db.from("employees").select("id,code,display_name,role,telegram_chat_id").eq("code", code).maybeSingle();
       if (error) translateDatabaseError(error);
       if (!data || !isEmployeeCode(data.code)) return null;
-      return { id: data.id, code: data.code, displayName: data.display_name, role: data.role } as EmployeeIdentity;
+      return { id: data.id, code: data.code, displayName: data.display_name, role: data.role, telegramChatId: data.telegram_chat_id === null ? null : Number(data.telegram_chat_id) } as EmployeeIdentity;
     },
     async insertSale(input) {
       const { error } = await db.from("sales").insert(input);

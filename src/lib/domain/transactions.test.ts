@@ -20,9 +20,9 @@ const kevin: EmployeeIdentity = { id: "k", code: "kevin", displayName: "Kevin vo
 
 describe("transaction permissions and persistence", () => {
   it("saves a website sale as pending", async () => {
-    const { repo, sales } = repository(salesperson);
+    const { repo, sales } = repository({ ...salesperson, telegramChatId: 12345 });
     await submitSale(repo, "richard", { reference: "S01", customer: "Olivia", project: "A", description: "Relatives", amount: 100000, proposedRichardPct: 50, proposedAnastasiaPct: 30, proposedJeanClaudePct: 20 });
-    expect(sales[0]).toMatchObject({ reference: "S01", status: "PENDING_APPROVAL", submission_channel: "WEB", submitting_employee_id: "r" });
+    expect(sales[0]).toMatchObject({ reference: "S01", status: "PENDING_APPROVAL", submission_channel: "WEB", submitting_employee_id: "r", original_telegram_chat_id: 12345 });
   });
 
   it("denies Kevin from submitting a sale", async () => {

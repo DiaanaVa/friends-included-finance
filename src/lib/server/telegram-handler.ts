@@ -46,11 +46,11 @@ export async function handleTelegramUpdate(update:TelegramUpdate){
    if(conversation.transaction_kind==="SALE"){
      const split=(payload.split??"").split(",").map(Number); const parsed=saleSubmissionSchema.safeParse({reference:payload.reference,customer:payload.customer,project:payload.project?.toUpperCase(),description:payload.description,amount:payload.amount,proposedRichardPct:split[0],proposedAnastasiaPct:split[1],proposedJeanClaudePct:split[2]});
      if(!parsed.success){await say(chatId,`${firstValidationError(parsed.error)} Send /sale to start again.`);await clearConversation(userId);return {handled:true};}
-     const result=await submitSale(createTransactionRepository(),employee.code,parsed.data,{channel:"TELEGRAM",telegramChatId:chatId});await clearConversation(userId);await syncTransaction("SALE",result.reference);await say(chatId,`${result.reference} saved with status PENDING APPROVAL.`);
+     const result=await submitSale(createTransactionRepository(),employee.code,parsed.data,{channel:"TELEGRAM",telegramChatId:chatId});await clearConversation(userId);await syncTransaction("SALE",result.reference);await say(chatId,`${result.reference} saved. Amount: €${(parsed.data.amount/100).toFixed(2)}. Project: ${parsed.data.project}. Status: PENDING APPROVAL.`);
    }else{
      const parsed=expenseSubmissionSchema.safeParse({reference:payload.reference,category:payload.category,description:payload.description,amount:payload.amount,proposedAllocation:payload.allocation?.toUpperCase()});
      if(!parsed.success){await say(chatId,`${firstValidationError(parsed.error)} Send /expense to start again.`);await clearConversation(userId);return {handled:true};}
-     const result=await submitExpense(createTransactionRepository(),employee.code,parsed.data,{channel:"TELEGRAM",telegramChatId:chatId});await clearConversation(userId);await syncTransaction("EXPENSE",result.reference);await say(chatId,`${result.reference} saved with status ${result.status.replaceAll("_"," ")}.`);
+     const result=await submitExpense(createTransactionRepository(),employee.code,parsed.data,{channel:"TELEGRAM",telegramChatId:chatId});await clearConversation(userId);await syncTransaction("EXPENSE",result.reference);await say(chatId,`${result.reference} saved. Amount: €${(parsed.data.amount/100).toFixed(2)}. Proposed allocation: ${parsed.data.proposedAllocation}. Status: ${result.status.replaceAll("_"," ")}.`);
    }
  }catch(error){await clearConversation(userId);await say(chatId,`${error instanceof TransactionError?error.message:"The transaction could not be saved."} Send the command again to retry.`);}
  return {handled:true};

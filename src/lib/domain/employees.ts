@@ -8,6 +8,7 @@ export interface EmployeeIdentity {
   code: EmployeeCode;
   displayName: string;
   role: EmployeeRole;
+  telegramChatId?: number | null;
 }
 
 export const demonstrationEmployees: Array<Omit<EmployeeIdentity, "id">> = [

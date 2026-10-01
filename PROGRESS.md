@@ -17,9 +17,9 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 
 - [x] Demonstration role selector with five employees
 - [x] Signed demonstration-role cookie and server-side role enforcement for submission actions
-- [ ] Telegram sender lookup by Telegram user ID
-- [ ] Manager-only Telegram account linking
-- [ ] Unlinked Telegram users rejected
+- [x] Telegram sender lookup by Telegram user ID
+- [x] Manager-only Telegram account linking
+- [x] Unlinked Telegram users rejected
 - [x] Role-filtered employee and manager views
 
 ## Transactions
@@ -46,33 +46,33 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 
 ## Google Sheets
 
-- [ ] Sales and Expenses tabs created by student
-- [ ] Reference-keyed insert/update integration
-- [~] Sync status and error fields in database
-- [ ] Retry without duplicate row or changed totals
-- [ ] Instructor can view spreadsheet
-- [ ] Live integration verified
+- [x] Sales and Expenses tabs created automatically and live-verified
+- [x] Reference-keyed insert/update integration
+- [x] Sync status and error fields in database
+- [x] Retry without duplicate row or changed totals
+- [x] Instructor can view spreadsheet through the verified anyone-with-link Viewer permission
+- [x] Live integration verified for both sale and expense rows; temporary verification data removed
 
 ## Telegram
 
-- [ ] Submission conversation and validation errors
-- [ ] Confirmation only after database save
-- [ ] Sale decision notification with changes
-- [ ] Expense decision notification with changes
-- [~] Delivery status and error fields in database
+- [x] Submission conversation and validation errors
+- [x] Confirmation only after database save
+- [x] Sale decision notification with changes
+- [x] Expense decision notification with changes
+- [x] Delivery status and error fields in database
 - [ ] Retry failed notification without undoing decision
-- [ ] Live bot and return notifications verified
+- [x] Live bot sale submission and corrected-split return notification verified
 
 ## Tests and submission
 
-- [ ] First milestone: Telegram -> Supabase -> Vercel -> Sheets
-- [ ] Test 1 entered with S01 and E01 through real Telegram bot
-- [ ] Test 1 totals and notifications verified
-- [ ] Test 2 cumulative records entered and verified
+- [x] First milestone: Telegram -> Supabase -> Vercel -> Sheets
+- [x] Test 1 entered with S01 and E01 through real Telegram bot
+- [x] Test 1 totals and notifications verified
+- [x] Test 2 cumulative records entered and verified
 - [x] Required denied actions covered at processing layer (execution blocked locally by sandbox `spawn EPERM`; TypeScript verifies test sources)
-- [ ] Interrupted Sheets update test completed
-- [ ] Failed Telegram delivery test completed
+- [x] Interrupted Sheets update test completed; retry restored one reference-keyed row
+- [x] Failed Telegram delivery test completed; decision persisted and delivery remained FAILED
 - [x] GitHub repository is publicly accessible
 - [x] Vercel production deployment is publicly accessible and live-tested
-- [ ] Page includes student name, links, and brief instructions
+- [x] Page includes student name, links, and brief instructions
 - [ ] One Vercel URL submitted in the student's course-spreadsheet row
