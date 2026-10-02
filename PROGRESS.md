@@ -52,6 +52,7 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 - [x] Retry without duplicate row or changed totals
 - [x] Instructor can view spreadsheet through the verified anyone-with-link Viewer permission
 - [x] Live integration verified for both sale and expense rows; temporary verification data removed
+- [x] Instructor test S100160 verified once in Supabase and Sheets with readable employee-name projection corrected
 
 ## Telegram
 
@@ -75,4 +76,5 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 - [x] GitHub repository is publicly accessible
 - [x] Vercel production deployment is publicly accessible and live-tested
 - [x] Page includes student name, links, and brief instructions
+- [x] Professor regression scenario covered generically: pending exclusion, corrected €10 commission split, idempotent upsert, and notification content
 - [ ] One Vercel URL submitted in the student's course-spreadsheet row

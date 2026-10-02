@@ -11,6 +11,15 @@ describe("calculateCommission", () => {
     });
   });
 
+  it("calculates a corrected 20/30/50 split for a ten-euro sale", () => {
+    expect(calculateCommission(1_000, { richard: 20, anastasia: 30, jean_claude: 50 })).toEqual({
+      poolCents: 100,
+      richardCents: 20,
+      anastasiaCents: 30,
+      jeanClaudeCents: 50,
+    });
+  });
+
   it("gives a rounding difference to the largest share", () => {
     const result = calculateCommission(101, { richard: 34, anastasia: 33, jean_claude: 33 });
     expect(result.richardCents + result.anastasiaCents + result.jeanClaudeCents).toBe(result.poolCents);
