@@ -1,4 +1,5 @@
 import "server-only";
+import { telegramHelpText } from "@/lib/domain/telegram-help";
 import { expenseSubmissionSchema, firstValidationError, saleSubmissionSchema } from "@/lib/domain/validation";
 import { submitExpense, submitSale, TransactionError } from "@/lib/domain/transactions";
 import { createTransactionRepository } from "./transaction-repository";
@@ -28,7 +29,7 @@ export async function handleTelegramUpdate(update:TelegramUpdate){
  if(!employee){await say(chatId,"This Telegram account is not linked. Send /whoami, then ask Svetlana to link your ID in the website manager view.");return {handled:true};}
  await db.from("employees").update({telegram_chat_id:chatId,updated_at:new Date().toISOString()}).eq("id",employee.id);
  if(text==="/cancel"){await clearConversation(userId);await say(chatId,"Cancelled.");return {handled:true};}
- if(text==="/start"||text==="/help"){const command=employee.role==="salesperson"?"/sale":employee.role==="expense_reporter"?"/expense":"Use the website manager view for approvals and Telegram account linking.";await say(chatId,`Hello ${employee.display_name}. ${command}`);return {handled:true};}
+ if(text==="/start"||text==="/help"){await say(chatId,telegramHelpText(employee.display_name,employee.role));return {handled:true};}
  if(text==="/sale"){
    if(employee.role!=="salesperson"){await say(chatId,"Only salespeople can submit sales.");return {handled:true};}
    await saveConversation({telegram_user_id:userId,telegram_chat_id:chatId,transaction_kind:"SALE",step:"reference",payload:{}});await say(chatId,prompts.reference);return {handled:true};
