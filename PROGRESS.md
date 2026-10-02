@@ -18,7 +18,7 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 - [x] Demonstration role selector with five employees
 - [x] Signed demonstration-role cookie and server-side role enforcement for submission actions
 - [x] Telegram sender lookup by Telegram user ID
-- [x] Manager-only Telegram account linking
+- [x] Manager-only atomic Telegram test-account transfer between fictional employees, live-verified without changing historical transaction ownership or chat destinations
 - [x] Unlinked Telegram users rejected
 - [x] Role-filtered employee and manager views
 
@@ -63,6 +63,7 @@ Legend: `[x]` implemented locally, `[ ]` not implemented, `[~]` designed or scaf
 - [x] Delivery status and error fields in database
 - [ ] Retry failed notification without undoing decision
 - [x] Live bot sale submission and corrected-split return notification verified
+- [x] Live Kevin `/help`, denied `/sale`, expense submission, changed allocation notification, Sheets upsert, and idempotent retry verified; temporary verification record removed
 
 ## Tests and submission
 
